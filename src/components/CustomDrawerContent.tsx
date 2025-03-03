@@ -1,5 +1,5 @@
 import { View, Text, SafeAreaView, ScrollView } from 'react-native'
-import { Drawer, List } from 'react-native-paper'
+import {  List } from 'react-native-paper'
 import React,{useState, useEffect} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -45,9 +45,7 @@ const CustomDrawerContent = () => {
               title={() => (
                 <Text className='font-bold text-lg'>{story.title.replace(/^"|"$|/g, '')}</Text>
               )}/>
-              {/* {index < stories.length && (
-                <View className='w-full h-[1px] bg-gray-300'/>
-              )} */}
+              
             </React.Fragment>
           ))}
           {stories.length === 0 && (

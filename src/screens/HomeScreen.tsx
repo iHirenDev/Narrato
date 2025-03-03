@@ -120,14 +120,7 @@ const HomeScreen = ({}) => {
         mode='contained'
       >
         {loading ? <ActivityIndicator size='small' color='#ffff'/> : 'Generate Story'}
-      </Button>
-      {/* {loading && (
-        <View className='items-center justify-center'>
-          <ActivityIndicator size='large' color='#826aed' animating={true}/>
-          <Text>Generating story...</Text>
-        </View>
-      )} */}
-      
+      </Button> 
     </View>
   )
 }

@@ -7,6 +7,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '../NavigationParamList'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { log } from 'console'
 
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DrawerNavigator'>
@@ -19,7 +20,8 @@ const HomeScreen = ({}) => {
   const [stories, setStories] = useState<Story | null>(null)
 
   const openai = new OpenAI({
-    apiKey: config.openai_api_key,
+    baseURL: 'https://api.deepseek.com',
+    apiKey: config.deepsee_api_key,
   })
 
   type Story = {
@@ -69,12 +71,22 @@ const HomeScreen = ({}) => {
             content:storyPrompt
           }
         ],
-        model:'gpt-4'
+        // model:'gpt-4',
+        model: "deepseek-chat",
+        
+        temperature: 1.5
       });
 
       const generatedStory = completion.choices[0]?.message?.content || '';
       const lines = generatedStory.split('\n');
-      const title = lines[0].replace(/^Title:\s*/, '');
+      let title = '';
+      
+      if(generatedStory.includes('**Title:')){
+        title = lines[0].replace(/\*\*/g, "").slice(6);
+      } else{
+        title = lines[0].replace(/\*\*/g, "");
+      }
+      
       const story = lines.slice(1).join('\n').trim();
 
       const timestamp = new Date().toISOString();

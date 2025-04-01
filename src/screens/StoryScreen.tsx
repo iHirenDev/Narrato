@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, SafeAreaView } from 'react-native'
-import { IconButton, MD3Colors } from 'react-native-paper';
+import { IconButton, MD3Colors, Snackbar } from 'react-native-paper';
 import React,{useState, useEffect} from 'react'
 import { RouteProp } from '@react-navigation/native'
 import { RootStackParamList } from '../NavigationParamList'
@@ -10,7 +10,13 @@ import * as FileSystem from 'expo-file-system';
 import * as Speech from 'expo-speech';
 import polly from "../aws-config";
 import { Buffer } from "buffer";
-
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import Feather from '@expo/vector-icons/Feather';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import * as Clipboard from 'expo-clipboard';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/store';
+import { toggleFavorite } from '../store/features/storySlice';
 
 type StoryScreenRouteProp = RouteProp<RootStackParamList, 'Story'>
 
@@ -30,7 +36,15 @@ const StoryScreen = ({route}: {route: StoryScreenRouteProp}) => {
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playBackPosition, setPlayBackPosition] = useState(0);
+  const [copiedStory, setCopiedStory] = useState('')
+  const [visible, setVisible] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   const {storyData} = route.params;
+
+  const dispatch = useDispatch()
+  const story = useSelector((state:RootState) =>
+    state.stories.find((s) => s.id === storyData.id)
+  );
 
   useEffect(() => {
     // if(storyData.audio){
@@ -70,6 +84,19 @@ const StoryScreen = ({route}: {route: StoryScreenRouteProp}) => {
     // });
   }
 */
+
+  const copyStoryToClipboard = async () => {
+    await Clipboard.setStringAsync(storyData.story)
+    setCopiedStory(storyData.story)
+    setVisible(true)
+  }
+
+  const toggleFavorites = (id: string) => {
+    dispatch(toggleFavorite(id))
+  }
+
+  const onDismissSnackBar = () => setVisible(false);
+
 
   const generateSound = async (text: string):Promise<void> => {
     const params:AWS.Polly.SynthesizeSpeechInput = {
@@ -216,25 +243,47 @@ const StoryScreen = ({route}: {route: StoryScreenRouteProp}) => {
       
         <Text className='font-bold text-2xl text-center'>{storyData.title}</Text>
 
-        <View className='bg-gray-200 rounded-l p-2'>
+        <View className='bg-[#edeaea] rounded-lg p-2'>
           <Text className='text-lg text-justify'>{storyData.story}</Text>
         </View>
         <View className='flex flex-row justify-end'>
           <IconButton 
-            className=''
-            icon='clipboard'
+            icon={() => <FontAwesome5 name="copy" size={30} color="#515151" />}
             iconColor='#826aed'
             size={30}
-            // onPress={playPauseAudio}
+            onPress={copyStoryToClipboard}
           />
-          <IconButton 
-            className=''
-            icon={isPlaying ? 'pause' : 'volume-high'}
+          <IconButton             
+            icon={() => isPlaying ? 
+                  <Ionicons name="pause-sharp" size={30} color="#515151" /> : 
+                  <Feather name="volume-2" size={30} color="#515151" />}
             size={30}
             iconColor='#826aed'
             onPress={playSound}
           />
+          <IconButton             
+            icon={() => story?.isFavorite ? 
+                  <Ionicons name="star" size={30} color="#515151" /> : 
+                  <Ionicons name="star-outline" size={30} color="#515151" />}
+            size={30}
+            iconColor='#826aed'
+            onPress={() => toggleFavorites(storyData.id)}
+          />
         </View>
+        <Snackbar
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          duration={2000}
+          elevation={4}
+          action={{
+            label: 'OK',
+            onPress: () => {
+              onDismissSnackBar
+            }
+          }}
+        >
+          Story copied
+        </Snackbar>
       </ScrollView>
     </SafeAreaView>
   )

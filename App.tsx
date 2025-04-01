@@ -8,6 +8,9 @@ import HomeScreen from './src/screens/HomeScreen';
 import StoryScreen from './src/screens/StoryScreen';
 import CustomDrawerContent from './src/components/CustomDrawerContent';
 import { RootStackParamList } from './src/NavigationParamList';
+import {Provider} from 'react-redux';
+import {store, persistor} from './src/store/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator<RootStackParamList>();
@@ -43,27 +46,30 @@ function DrawerNavigator() {
 
 export default function App() {
   return (
-    
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen 
-            name="DrawerNavigator" 
-            component={DrawerNavigator} 
-          />
-          <Stack.Screen 
-            name="Story" 
-            component={StoryScreen}
-            options={{
-              headerShown: true,
-              headerStyle: {
-                backgroundColor: '#826aed',
-              },
-              headerTintColor: '#fff',
-              headerBackTitle: 'Back',
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen 
+                name="DrawerNavigator" 
+                component={DrawerNavigator} 
+              />
+              <Stack.Screen 
+                name="Story" 
+                component={StoryScreen}
+                options={{
+                  headerShown: true,
+                  headerStyle: {
+                    backgroundColor: '#826aed',
+                  },
+                  headerTintColor: '#fff',
+                  headerBackTitle: 'Back',
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </PersistGate>
+      </Provider>
   );
 }
 

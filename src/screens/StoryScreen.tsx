@@ -1,47 +1,42 @@
-import { View, Text, ScrollView, SafeAreaView } from 'react-native'
-import { IconButton, MD3Colors, Snackbar } from 'react-native-paper';
-import React, { useState, useEffect } from 'react'
-import { RouteProp } from '@react-navigation/native'
-import { RootStackParamList } from '../NavigationParamList'
-import OpenAI from 'openai'
-import config from '../lib/config'
-import { Audio } from 'expo-av';
-import * as FileSystem from 'expo-file-system';
-import * as Speech from 'expo-speech';
+import { View, Text, ScrollView, SafeAreaView } from "react-native";
+import { IconButton, MD3Colors, Snackbar } from "react-native-paper";
+import React, { useState, useEffect } from "react";
+import { RouteProp } from "@react-navigation/native";
+import { RootStackParamList } from "../NavigationParamList";
+import OpenAI from "openai";
+import config from "../lib/config";
+import { Audio } from "expo-av";
+import * as FileSystem from "expo-file-system";
+import * as Speech from "expo-speech";
 import polly from "../lib/aws-config";
 import { Buffer } from "buffer";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import Feather from '@expo/vector-icons/Feather';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import * as Clipboard from 'expo-clipboard';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/store';
-import { toggleFavorite } from '../store/features/storySlice';
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import * as Clipboard from "expo-clipboard";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { toggleFavorite } from "../store/features/storySlice";
 
-type StoryScreenRouteProp = RouteProp<RootStackParamList, 'Story'>
-
-
+type StoryScreenRouteProp = RouteProp<RootStackParamList, "Story">;
 
 const openai = new OpenAI({
   apiKey: config.openai_api_key,
-})
-
-
+});
 
 const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
-
   let soundInstance: Audio.Sound | null = null;
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [playBackPosition, setPlayBackPosition] = useState(0);
-  const [copiedStory, setCopiedStory] = useState('')
+  const [copiedStory, setCopiedStory] = useState("");
   const [visible, setVisible] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const { storyData } = route.params;
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const story = useSelector((state: RootState) =>
     state.stories.find((s) => s.id === storyData.id)
   );
@@ -57,8 +52,8 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
     //     sound.unloadAsync()
     //   }
     // }
-    generateSound(storyData.story)
-  }, [])
+    generateSound(storyData.story);
+  }, []);
 
   /*
 
@@ -86,27 +81,28 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
 */
 
   const copyStoryToClipboard = async () => {
-    await Clipboard.setStringAsync(storyData.story)
-    setCopiedStory(storyData.story)
-    setVisible(true)
-  }
+    await Clipboard.setStringAsync(storyData.story);
+    setCopiedStory(storyData.story);
+    setVisible(true);
+  };
 
   const toggleFavorites = (id: string) => {
-    dispatch(toggleFavorite(id))
-  }
+    dispatch(toggleFavorite(id));
+  };
 
   const onDismissSnackBar = () => setVisible(false);
-
 
   const generateSound = async (text: string): Promise<void> => {
     const params: AWS.Polly.SynthesizeSpeechInput = {
       Text: text,
-      OutputFormat: 'mp3',
-      VoiceId: 'Joanna'
+      OutputFormat: "mp3",
+      VoiceId: "Joanna",
     };
 
     try {
-      const data: AWS.Polly.SynthesizeSpeechOutput = await polly.synthesizeSpeech(params).promise();
+      const data: AWS.Polly.SynthesizeSpeechOutput = await polly
+        .synthesizeSpeech(params)
+        .promise();
 
       if (data.AudioStream) {
         const audioBuffer = new Uint8Array(data.AudioStream as ArrayBuffer);
@@ -117,7 +113,9 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
           setSound(null);
         }
 
-        const { sound: newSound } = await Audio.Sound.createAsync({ uri: `data:audio/mp3;base64,${base64Audio}` });
+        const { sound: newSound } = await Audio.Sound.createAsync({
+          uri: `data:audio/mp3;base64,${base64Audio}`,
+        });
         // soundInstance = newSound;
         // setIsPlaying(true); // Update UI state
         // await soundInstance.playAsync();
@@ -128,7 +126,7 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
               setPlayBackPosition(0); // Reset position after completion
               setIsPlaying(false); // Update UI state
             } else if (status.isPlaying) {
-              setPlayBackPosition(status.positionMillis); // Track playback position     
+              setPlayBackPosition(status.positionMillis); // Track playback position
             }
           }
         });
@@ -140,10 +138,10 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
     } catch (error) {
       console.error("Error generating speech:", error);
     }
-  }
+  };
 
   const playSound = async () => {
-    if (!sound) return
+    if (!sound) return;
 
     try {
       if (isPlaying) {
@@ -160,10 +158,8 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
         await sound.playAsync();
         setIsPlaying(true);
       }
-    } catch (error) {
-
-    }
-  }
+    } catch (error) {}
+  };
 
   /*
 
@@ -240,35 +236,41 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
   */
   return (
     <SafeAreaView>
+      <ScrollView className="screen-container">
+        <Text className="title-large">{storyData.title}</Text>
 
-      <ScrollView className='p-2'>
-
-        <Text className='font-bold text-2xl text-center'>{storyData.title}</Text>
-
-        <View className='bg-[#edeaea] rounded-lg p-2'>
-          <Text className='text-lg text-justify'>{storyData.story}</Text>
+        <View className="story-content-box">
+          <Text className="story-text">{storyData.story}</Text>
         </View>
-        <View className='flex flex-row justify-end'>
+        <View className="action-buttons-row">
           <IconButton
             icon={() => <FontAwesome5 name="copy" size={30} color="#515151" />}
-            iconColor='#826aed'
+            iconColor="#826aed"
             size={30}
             onPress={copyStoryToClipboard}
           />
           <IconButton
-            icon={() => isPlaying ?
-              <Ionicons name="pause-sharp" size={30} color="#515151" /> :
-              <Feather name="volume-2" size={30} color="#515151" />}
+            icon={() =>
+              isPlaying ? (
+                <Ionicons name="pause-sharp" size={30} color="#515151" />
+              ) : (
+                <Feather name="volume-2" size={30} color="#515151" />
+              )
+            }
             size={30}
-            iconColor='#826aed'
+            iconColor="#826aed"
             onPress={playSound}
           />
           <IconButton
-            icon={() => story?.isFavorite ?
-              <Ionicons name="star" size={30} color="#515151" /> :
-              <Ionicons name="star-outline" size={30} color="#515151" />}
+            icon={() =>
+              story?.isFavorite ? (
+                <Ionicons name="star" size={30} color="#515151" />
+              ) : (
+                <Ionicons name="star-outline" size={30} color="#515151" />
+              )
+            }
             size={30}
-            iconColor='#826aed'
+            iconColor="#826aed"
             onPress={() => toggleFavorites(storyData.id)}
           />
         </View>
@@ -278,17 +280,17 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
           duration={2000}
           elevation={4}
           action={{
-            label: 'OK',
+            label: "OK",
             onPress: () => {
-              onDismissSnackBar
-            }
+              onDismissSnackBar;
+            },
           }}
         >
           Story copied
         </Snackbar>
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default StoryScreen
+export default StoryScreen;

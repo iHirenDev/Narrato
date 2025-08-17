@@ -1,3 +1,76 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Story App Component Styles */
+@layer components {
+  /* Screen containers */
+  .screen-container {
+    @apply p-2;
+  }
+
+  /* Text styles */
+  .title-large {
+    @apply font-bold text-2xl text-center;
+  }
+
+  .title-medium {
+    @apply text-base text-center font-semibold;
+  }
+
+  .subtitle {
+    @apply font-semibold text-base;
+  }
+
+  .story-text {
+    @apply text-lg text-justify;
+  }
+
+  .divider-text {
+    @apply text-center font-bold p-4;
+  }
+
+  /* Layout components */
+  .story-content-box {
+    @apply bg-[#edeaea] rounded-lg p-2;
+  }
+
+  .keyword-container {
+    @apply flex flex-row flex-wrap mt-2;
+  }
+
+  .action-buttons-row {
+    @apply flex flex-row justify-end;
+  }
+
+  /* Input and button styles */
+  .story-input {
+    @apply m-2;
+  }
+
+  .story-button {
+    @apply m-2;
+  }
+
+  .keyword-chip {
+    @apply m-1;
+  }
+
+  .section-container {
+    @apply m-2;
+  }
+
+  /* Spacing utilities */
+  .spacer-small {
+    @apply h-5;
+  }
+
+  /* Brand colors */
+  .primary-button-color {
+    background-color: #826aed;
+  }
+
+  .icon-color {
+    color: #515151;
+  }
+}

@@ -49,35 +49,35 @@ const HomeScreen = ({}) => {
   };
 
   return (
-    <View className='p-2'>
+    <View className='screen-container'>
       <View>
-        <Text className='text-base text-center font-semibold'>Enter a few words or ideas, and let AI create a unique story for you!!!
+        <Text className='title-medium'>Enter a few words or ideas, and let AI create a unique story for you!!!
         </Text>
       </View>
       <TextInput 
-        className='m-2'
+        className='story-input'
         mode='outlined' 
         label='Enter keywords for the story'
         value={storyPrompt}
         onChangeText={setStoryPrompt}
         multiline />
-  <View className='h-5'></View>
+      <View className='spacer-small'></View>
       <Button 
         buttonColor='#826aed'
         onPress={handleGenerateStory}
-        className='m-2'
+        className='story-button'
         mode='contained'
       >
         {loading ? <ActivityIndicator size='small' color='#ffff'/> : 'Generate Story'}
       </Button> 
-      <Text className='text-center font-bold p-4'>OR</Text>
-      <View className='m-2'>
-        <Text className='font-semibold text-base'>Choose story keywords from below themes</Text>
-        <View className='flex flex-row flex-wrap mt-2'>
+      <Text className='divider-text'>OR</Text>
+      <View className='section-container'>
+        <Text className='subtitle'>Choose story keywords from below themes</Text>
+        <View className='keyword-container'>
           {
             FAVORITE_KEYWORDS.map((keyword,index) =>(
               <Chip
-                className='m-1'
+                className='keyword-chip'
                 key={index}
                 onPress={() => setStoryPrompt(keyword)}
                 mode='outlined'>
@@ -90,5 +90,6 @@ const HomeScreen = ({}) => {
     </View>
   )
 }
+
 
 export default HomeScreen

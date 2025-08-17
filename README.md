@@ -9,6 +9,10 @@ AI Story Generator is a React Native application that creates engaging stories b
 - 📚 **Story Storage** – Saves generated stories locally using `AsyncStorage`.  
 - 🎨 **Beautiful UI** – Designed with `React Native Paper` for a smooth and modern experience.  
 - 🗄️ **Drawer Navigation** – Implemented with `React Navigation` for easy access to different sections.  
+- 📦 **Redux** – For state management.
+- 📱 **Cross-Platform Compatibility** – Available on both iOS and Android platforms.
+
+
  
 
 ## 🛠️ Tech Stack  

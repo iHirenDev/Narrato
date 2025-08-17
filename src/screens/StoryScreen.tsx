@@ -1,14 +1,14 @@
 import { View, Text, ScrollView, SafeAreaView } from 'react-native'
 import { IconButton, MD3Colors, Snackbar } from 'react-native-paper';
-import React,{useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { RouteProp } from '@react-navigation/native'
 import { RootStackParamList } from '../NavigationParamList'
 import OpenAI from 'openai'
-import config from '../config'
+import config from '../lib/config'
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import * as Speech from 'expo-speech';
-import polly from "../aws-config";
+import polly from "../lib/aws-config";
 import { Buffer } from "buffer";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Feather from '@expo/vector-icons/Feather';
@@ -23,13 +23,13 @@ type StoryScreenRouteProp = RouteProp<RootStackParamList, 'Story'>
 
 
 const openai = new OpenAI({
-    apiKey: config.openai_api_key,
-  })
+  apiKey: config.openai_api_key,
+})
 
 
 
-const StoryScreen = ({route}: {route: StoryScreenRouteProp}) => {
-  
+const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
+
   let soundInstance: Audio.Sound | null = null;
 
   const [loading, setLoading] = useState(false)
@@ -39,10 +39,10 @@ const StoryScreen = ({route}: {route: StoryScreenRouteProp}) => {
   const [copiedStory, setCopiedStory] = useState('')
   const [visible, setVisible] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
-  const {storyData} = route.params;
+  const { storyData } = route.params;
 
   const dispatch = useDispatch()
-  const story = useSelector((state:RootState) =>
+  const story = useSelector((state: RootState) =>
     state.stories.find((s) => s.id === storyData.id)
   );
 
@@ -59,7 +59,7 @@ const StoryScreen = ({route}: {route: StoryScreenRouteProp}) => {
     // }
     generateSound(storyData.story)
   }, [])
-  
+
   /*
 
   EXPO Speech demo...
@@ -98,58 +98,60 @@ const StoryScreen = ({route}: {route: StoryScreenRouteProp}) => {
   const onDismissSnackBar = () => setVisible(false);
 
 
-  const generateSound = async (text: string):Promise<void> => {
-    const params:AWS.Polly.SynthesizeSpeechInput = {
+  const generateSound = async (text: string): Promise<void> => {
+    const params: AWS.Polly.SynthesizeSpeechInput = {
       Text: text,
       OutputFormat: 'mp3',
       VoiceId: 'Joanna'
-      };
+    };
 
-      try {
-        const data: AWS.Polly.SynthesizeSpeechOutput = await polly.synthesizeSpeech(params).promise();
+    try {
+      const data: AWS.Polly.SynthesizeSpeechOutput = await polly.synthesizeSpeech(params).promise();
 
-        if (data.AudioStream) {
-            const audioBuffer = new Uint8Array(data.AudioStream as ArrayBuffer);
-            const base64Audio = Buffer.from(audioBuffer).toString("base64");
-            
-            if (sound) {
-                await sound.unloadAsync();
-                setSound(null);
-              }
-            
-            const { sound:newSound } = await Audio.Sound.createAsync({ uri: `data:audio/mp3;base64,${base64Audio}` });
-                  // soundInstance = newSound;
-                  // setIsPlaying(true); // Update UI state
-                  // await soundInstance.playAsync();
-            
-                  newSound.setOnPlaybackStatusUpdate((status) => {
-                    if (status.isLoaded) {
-                      if (status.didJustFinish) {
-                        setPlayBackPosition(0); // Reset position after completion
-                        setIsPlaying(false); // Update UI state
-                      } else if (status.isPlaying) {
-                        setPlayBackPosition(status.positionMillis); // Track playback position     
-                    }
-                    }
-                  });
-                  soundInstance = newSound;
-                  setSound(newSound);
-                } else {
-                  console.error("Error: AudioStream is undefined or empty");
-                }
-      } catch (error) {
-        console.error("Error generating speech:", error);
+      if (data.AudioStream) {
+        const audioBuffer = new Uint8Array(data.AudioStream as ArrayBuffer);
+        const base64Audio = Buffer.from(audioBuffer).toString("base64");
+
+        if (sound) {
+          await sound.unloadAsync();
+          setSound(null);
+        }
+
+        const { sound: newSound } = await Audio.Sound.createAsync({ uri: `data:audio/mp3;base64,${base64Audio}` });
+        // soundInstance = newSound;
+        // setIsPlaying(true); // Update UI state
+        // await soundInstance.playAsync();
+
+        newSound.setOnPlaybackStatusUpdate((status) => {
+          if (status.isLoaded) {
+            if (status.didJustFinish) {
+              setPlayBackPosition(0); // Reset position after completion
+              setIsPlaying(false); // Update UI state
+            } else if (status.isPlaying) {
+              setPlayBackPosition(status.positionMillis); // Track playback position     
+            }
+          }
+        });
+        soundInstance = newSound;
+        setSound(newSound);
+      } else {
+        console.error("Error: AudioStream is undefined or empty");
       }
+    } catch (error) {
+      console.error("Error generating speech:", error);
     }
-  
+  }
+
   const playSound = async () => {
-    if(!sound) return
+    if (!sound) return
 
     try {
       if (isPlaying) {
         // Pause playback and store the current position
         const status = await sound.getStatusAsync();
-        setPlayBackPosition(status.positionMillis);
+        if (status.isLoaded) {
+          setPlayBackPosition(status.positionMillis);
+        }
         await sound.pauseAsync();
         setIsPlaying(false);
       } else {
@@ -159,7 +161,7 @@ const StoryScreen = ({route}: {route: StoryScreenRouteProp}) => {
         setIsPlaying(true);
       }
     } catch (error) {
-      
+
     }
   }
 
@@ -238,33 +240,33 @@ const StoryScreen = ({route}: {route: StoryScreenRouteProp}) => {
   */
   return (
     <SafeAreaView>
-    
+
       <ScrollView className='p-2'>
-      
+
         <Text className='font-bold text-2xl text-center'>{storyData.title}</Text>
 
         <View className='bg-[#edeaea] rounded-lg p-2'>
           <Text className='text-lg text-justify'>{storyData.story}</Text>
         </View>
         <View className='flex flex-row justify-end'>
-          <IconButton 
+          <IconButton
             icon={() => <FontAwesome5 name="copy" size={30} color="#515151" />}
             iconColor='#826aed'
             size={30}
             onPress={copyStoryToClipboard}
           />
-          <IconButton             
-            icon={() => isPlaying ? 
-                  <Ionicons name="pause-sharp" size={30} color="#515151" /> : 
-                  <Feather name="volume-2" size={30} color="#515151" />}
+          <IconButton
+            icon={() => isPlaying ?
+              <Ionicons name="pause-sharp" size={30} color="#515151" /> :
+              <Feather name="volume-2" size={30} color="#515151" />}
             size={30}
             iconColor='#826aed'
             onPress={playSound}
           />
-          <IconButton             
-            icon={() => story?.isFavorite ? 
-                  <Ionicons name="star" size={30} color="#515151" /> : 
-                  <Ionicons name="star-outline" size={30} color="#515151" />}
+          <IconButton
+            icon={() => story?.isFavorite ?
+              <Ionicons name="star" size={30} color="#515151" /> :
+              <Ionicons name="star-outline" size={30} color="#515151" />}
             size={30}
             iconColor='#826aed'
             onPress={() => toggleFavorites(storyData.id)}

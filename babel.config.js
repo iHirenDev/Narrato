@@ -1,12 +1,10 @@
-// babel.config.js
 module.exports = function (api) {
-    api.cache(true);
-    return {
-      presets: ["babel-preset-expo"],
-      plugins: [
-        ['nativewind/babel'],
-        ['module:react-native-dotenv']
-      ],
-    };
+  api.cache(true);
+  return {
+    presets: [
+      ["babel-preset-expo", { jsxImportSource: "nativewind" }],
+      "nativewind/babel",
+    ],
+
   };
-  
+};

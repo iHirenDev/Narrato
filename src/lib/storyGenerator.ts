@@ -5,6 +5,8 @@ import { addStory } from '../store/features/storySlice';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../NavigationParamList';
 import { Dispatch } from '@reduxjs/toolkit';
+import { GoogleGenAI } from "@google/genai";
+
 
 export type Story = {
   id: string;
@@ -28,6 +30,77 @@ const openai = new OpenAI({
   baseURL: 'https://api.deepseek.com',
   apiKey: config.deepseek_api_key,
 });
+
+const geminiAI = new GoogleGenAI({apiKey:config.gemini_ai_api_key})
+
+export const generateStoryGemini = async ({
+  storyPrompt,
+  setLoading,
+  navigation,
+  dispatch
+}: GenerateStoryParams) => {
+  if (!storyPrompt.trim()) return;
+
+  setLoading(true);
+  Keyboard.dismiss();
+
+  try {
+    const response = await geminiAI.models.generateContent({
+      model:'gemini-2.5-flash-lite',
+      contents:[{
+        role:"user",
+        parts:[{
+          text:`You are a creative story writer. Create a short, engaging short story based on ${storyPrompt}. The story should be approximately 250-300 words long. Also provide a short title for the story. Make sure the story is complete and engaging despite its brevity.` 
+        }]
+      }],
+    })
+
+    if(!response.text){
+      return;
+    }
+    const storyResponse:string = response.text;
+    // const result = await model.generateContent(storyPrompt);
+    // const response = await result.response;
+    
+    const lines = storyResponse.split('\n');
+    let title = '';
+
+    if (storyResponse.includes('**Title:')) {
+      title = lines[0].replace(/\*\*/g, "").slice(6);
+    } else if(storyResponse.includes('## ')){
+      title = lines[0].replace(/\#\#/g,"");
+    }
+     else {
+      title = lines[0].replace(/\*\*/g, "");
+    }
+
+    const story = lines.slice(1).join('\n').trim();
+    const timestamp = new Date().toISOString();
+
+    const storyData: Story = {
+      id: timestamp,
+      title: title,
+      story: story,
+      isFavorite: false,
+      timestamp
+    };
+
+    dispatch(addStory({
+      id: timestamp,
+      title: title,
+      story: story,
+      isFavorite: false,
+      timestamp
+    }));
+
+    navigation.navigate('Story', { storyData });
+    setLoading(false);
+  } catch (error) {
+    console.log(error);
+    setLoading(false);
+  }
+};
+
 
 export const generateStory = async ({
   storyPrompt,
@@ -92,3 +165,4 @@ export const generateStory = async ({
     setLoading(false);
   }
 };
+

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Narrato",
-    "slug": "Narrato",
+    "slug": "narrato",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,17 +13,25 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ihirendev.narrato"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ihirendev.narrato"
     },
     "web": {
       "bundler": "metro",
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "12d4e220-19a7-4eb8-a9a3-e4379f8ecadf"
+      }
+    },
+    "owner": "ihirendev"
   }
 }

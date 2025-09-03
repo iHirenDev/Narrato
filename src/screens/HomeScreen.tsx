@@ -1,12 +1,13 @@
 import { View, Text } from 'react-native'
 import { TextInput, Chip, Button, ActivityIndicator } from 'react-native-paper'
-import React, {useState, useCallback} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '../NavigationParamList'
 import {useDispatch, useSelector} from 'react-redux'
 import { RootState } from '../store/store'
 import { generateStory } from '../lib/storyGenerator'
+import {generateStoryGemini} from '../lib/storyGenerator'
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DrawerNavigator'>
 
@@ -37,15 +38,22 @@ const HomeScreen = ({}) => {
     },[])
   )
 
+
   
 
   const handleGenerateStory = () => {
-    generateStory({
+    generateStoryGemini({
       storyPrompt,
       setLoading,
       navigation,
       dispatch
     });
+    // generateStory({
+    //   storyPrompt,
+    //   setLoading,
+    //   navigation,
+    //   dispatch
+    // });
   };
 
   return (

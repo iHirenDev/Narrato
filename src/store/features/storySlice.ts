@@ -36,9 +36,10 @@ const storiesSlice = createSlice({
             if (story) {
               story.isFavorite = !story.isFavorite;
             }
-          },
+        },
+        resetStories: () => initialState,
     }
 });
 
-export const {addStory, removeStory, toggleFavorite, setStories} = storiesSlice.actions;
+export const {addStory, removeStory, toggleFavorite, setStories, resetStories} = storiesSlice.actions;
 export default storiesSlice.reducer;

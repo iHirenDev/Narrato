@@ -1,13 +1,15 @@
 import { View, Text, SafeAreaView, ScrollView } from 'react-native'
-import {  List } from 'react-native-paper'
+import {  Button, Divider, List } from 'react-native-paper'
 import React,{useState, useEffect} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '../NavigationParamList'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {RootState} from '../store/store'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { FlatList } from 'react-native'
+import { resetStories } from '../store/features/storySlice'
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DrawerNavigator'>
 
@@ -17,6 +19,8 @@ const CustomDrawerContent = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const stories = useSelector((state:RootState) => state.stories)
+
+  const dispatch = useDispatch();
 
   type Story = {
     id: string;
@@ -40,14 +44,22 @@ const CustomDrawerContent = () => {
   // };
 
   return (
-    <SafeAreaView>
-      <View className='mt-12'>
-        <Text className='font-bold text-2xl pl-2'>Previous Stories</Text>
+    <SafeAreaView className='flex-1'>
+      <View className='mt-16'>
+        <Text className='font-bold text-2xl text-center'>
+          Previous Stories
+        </Text>
+       
         <View className='w-full h-[1px] bg-gray-300 mt-3'/>
-        <ScrollView>
+        {/* <ScrollView
+          className='mt-3 screen-container'
+          contentContainerStyle={{ flexGrow:1, paddingBottom: 100 }}
+          showsVerticalScrollIndicator
+        >
           
             {stories.map((story, index) => (
             <React.Fragment key={index}> 
+              
               <List.Item 
                 onPress={() => {
                   navigation.navigate('Story', {storyData: story});
@@ -62,13 +74,46 @@ const CustomDrawerContent = () => {
                   <Ionicons name="star" size={24} color='#515151' /> : <></>
                 )}
                 />  
+                {index === stories.length -  1 ? <View></View> : <Divider/>}
               </React.Fragment>
             ))}
             
           {stories.length === 0 && (
             <Text className='text-gray-500 font-bold text-center text-lg'>No stories generated yet.</Text>
           )}
-        </ScrollView>
+        </ScrollView> */}
+        <FlatList 
+          data={stories}
+          keyExtractor={(item,index) => item.id?.toString() ?? index.toString()}
+          contentContainerStyle = {{flexGrow:1, paddingBottom:100}}
+          showsVerticalScrollIndicator
+          ListEmptyComponent={() => (
+            <Text className='text-gray-500 font-bold text-center text-lg'>
+              No stories generated yet.
+            </Text>
+          )}
+          renderItem={({item,index}) => (
+            <>
+              <List.Item
+                onPress={() => {
+                  navigation.navigate("Story", { storyData: item });
+                }}
+                title={() => (
+                  <Text className="text-lg">
+                    {item.title.replace(/^"|"$|/g, "")}
+                  </Text>
+                )}
+                
+                right={() =>
+                  item.isFavorite ? (
+                    <Ionicons name="star" size={24} color="#515151" />
+                  ) : null
+                }
+              />
+              {index === stories.length - 1 ? <View /> : <Divider />}
+            </>
+          )}
+        />
         
     </View>
     </SafeAreaView>

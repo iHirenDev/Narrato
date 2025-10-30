@@ -106,7 +106,7 @@ const CustomDrawerContent = () => {
                 
                 right={() =>
                   item.isFavorite ? (
-                    <Ionicons name="star" size={24} color="#515151" />
+                    <Ionicons name="star" size={24} color="#7742b7" />
                   ) : null
                 }
               />

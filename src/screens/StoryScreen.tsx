@@ -6,7 +6,7 @@ import { RootStackParamList } from "../NavigationParamList";
 import OpenAI from "openai";
 import config from "../lib/config";
 import { Audio } from "expo-av";
-import * as FileSystem from "expo-file-system";
+// import * as FileSystem from "expo-file-system";
 import * as Speech from "expo-speech";
 import polly from "../lib/aws-config";
 import { Buffer } from "buffer";
@@ -252,7 +252,7 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
         <View className="p-2 mt-4 mb-4 flex flex-row justify-center gap-10">
           <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border border-gray-500">
             <IconButton
-              icon={() => <FontAwesome5 name="copy" size={35} color="#09046f" />}
+              icon={() => <FontAwesome5 name="copy" size={35} color="#7742b7" />}
               // iconColor="#09046f"
               // size={35}
               onPress={copyStoryToClipboard}
@@ -264,13 +264,13 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
           <IconButton
             icon={() =>
               isPlaying ? (
-                <Ionicons name="pause-sharp" size={35} color="#09046f" />
+                <Ionicons name="pause-sharp" size={35} color="#7742b7" />
               ) : (
-                <Feather name="volume-2" size={35} color="#09046f" />
+                <Feather name="volume-2" size={35} color="#7742b7" />
               )
             }
             // size={30}
-            iconColor="#09046f"
+            iconColor="#7742b7"
             onPress={playSound}
           />
             <Text className="text-center">Listen</Text>
@@ -280,12 +280,12 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
           <IconButton
             icon={() =>
               story?.isFavorite ? (
-                <Ionicons name="star" size={35} color="#09046f" />
+                <Ionicons name="star" size={35} color="#7742b7" />
               ) : (
-                <Ionicons name="star-outline" size={35} color="#09046f" />
+                <Ionicons name="star-outline" size={35} color="#7742b7" />
               )
             }
-            iconColor="#09046f"
+            iconColor="#7742b7"
             onPress={() => toggleFavorites(storyData.id)}
           />
             <Text className="text-center">Favorite</Text>
@@ -293,8 +293,8 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
 
           <View className="flex flex-col justify-center items-center rounded-md h-24 w-[82px] border border-gray-500">
           <IconButton
-              icon={() => <FontAwesome name="repeat" size={35} color="#09046f" />}
-              iconColor="#09046f"
+              icon={() => <FontAwesome name="repeat" size={35} color="#7742b7" />}
+              iconColor="#7742b7"
               // size={35}
               onPress={regenerateStory}
             />

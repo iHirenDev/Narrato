@@ -22,6 +22,7 @@ const HomeScreen = ({}) => {
   const dispatch = useDispatch()
 
   const logo = require('../../assets/images/circle_logo.png')
+  const newLogo = require('../../assets/images/new_circle_logo.png')
 
   const FAVORITE_KEYWORDS = [
   'space adventure',
@@ -68,7 +69,7 @@ const HomeScreen = ({}) => {
       {/* Title + Subtitle */}
       <View className="items-center mt-8">
           {/* <Ionicons name="book-outline" size={28} color="white" /> */}
-          <Image source={logo} className="w-28 h-28 rounded-full p-2" />
+          <Image source={newLogo} className="w-32 h-32 rounded-full p-2" />
         
         <Text className="text-2xl font-bold mt-4 text-center">
           Create Amazing Stories
@@ -95,7 +96,7 @@ const HomeScreen = ({}) => {
       <View className='spacer-small'></View>
 
       <Button 
-        buttonColor='#09046f'
+        buttonColor='#7742b7'
         onPress={handleGenerateStory}
         className='story-button'
         mode='contained'

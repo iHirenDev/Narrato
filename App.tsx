@@ -22,7 +22,7 @@ function DrawerNavigator() {
       drawerContent={(props) => <CustomDrawerContent />}
       screenOptions={({ navigation }) => ({
         headerStyle: {
-          backgroundColor: '#09046f',
+          backgroundColor: '#7742b7',
         },
         headerTintColor: '#fff',
         drawerStyle: {
@@ -60,7 +60,7 @@ export default function App() {
                 options={{
                   headerShown: true,
                   headerStyle: {
-                    backgroundColor: '#09046f',
+                    backgroundColor: '#7742b7',
                   },
                   headerTintColor: '#fff',
                   headerBackTitle: 'Back',

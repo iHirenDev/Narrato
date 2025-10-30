@@ -1,18 +1,19 @@
 import { View, Text, ScrollView, SafeAreaView } from "react-native";
-import { IconButton, MD3Colors, Snackbar } from "react-native-paper";
+import { Divider, IconButton, MD3Colors, Snackbar } from "react-native-paper";
 import React, { useState, useEffect } from "react";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../NavigationParamList";
 import OpenAI from "openai";
 import config from "../lib/config";
 import { Audio } from "expo-av";
-import * as FileSystem from "expo-file-system";
+// import * as FileSystem from "expo-file-system";
 import * as Speech from "expo-speech";
 import polly from "../lib/aws-config";
 import { Buffer } from "buffer";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Feather from "@expo/vector-icons/Feather";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import * as Clipboard from "expo-clipboard";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
@@ -89,6 +90,11 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
   const toggleFavorites = (id: string) => {
     dispatch(toggleFavorite(id));
   };
+
+
+  const regenerateStory = () => {
+
+  }
 
   const onDismissSnackBar = () => setVisible(false);
 
@@ -235,14 +241,75 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
 
   */
   return (
-    <SafeAreaView>
-      <ScrollView className="screen-container">
-        <Text className="title-large">{storyData.title}</Text>
+    <SafeAreaView className="flex-1">
 
+      
+        <View>
+          <Text className="title-large mb-2 py-4">{storyData.title}</Text>
+          <Divider/>
+        </View>
+        {/* Button's for user actions */}
+        <View className="p-2 mt-4 mb-4 flex flex-row justify-center gap-10">
+          <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border border-gray-500">
+            <IconButton
+              icon={() => <FontAwesome5 name="copy" size={35} color="#7742b7" />}
+              // iconColor="#09046f"
+              // size={35}
+              onPress={copyStoryToClipboard}
+            />
+            <Text className="text-center">Copy</Text>
+          </View>
+
+          <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border border-gray-500">
+          <IconButton
+            icon={() =>
+              isPlaying ? (
+                <Ionicons name="pause-sharp" size={35} color="#7742b7" />
+              ) : (
+                <Feather name="volume-2" size={35} color="#7742b7" />
+              )
+            }
+            // size={30}
+            iconColor="#7742b7"
+            onPress={playSound}
+          />
+            <Text className="text-center">Listen</Text>
+          </View>
+
+          <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border border-gray-500">
+          <IconButton
+            icon={() =>
+              story?.isFavorite ? (
+                <Ionicons name="star" size={35} color="#7742b7" />
+              ) : (
+                <Ionicons name="star-outline" size={35} color="#7742b7" />
+              )
+            }
+            iconColor="#7742b7"
+            onPress={() => toggleFavorites(storyData.id)}
+          />
+            <Text className="text-center">Favorite</Text>
+          </View>
+
+          <View className="flex flex-col justify-center items-center rounded-md h-24 w-[82px] border border-gray-500">
+          <IconButton
+              icon={() => <FontAwesome name="repeat" size={35} color="#7742b7" />}
+              iconColor="#7742b7"
+              // size={35}
+              onPress={regenerateStory}
+            />
+            <Text className="text-center">Regenerate</Text>
+          </View>
+        </View>
+      <ScrollView 
+        className="screen-container"
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
+        showsVerticalScrollIndicator={true}  
+      >
         <View className="story-content-box">
           <Text className="story-text">{storyData.story}</Text>
         </View>
-        <View className="action-buttons-row">
+        {/* <View className="action-buttons-row">
           <IconButton
             icon={() => <FontAwesome5 name="copy" size={30} color="#515151" />}
             iconColor="#826aed"
@@ -273,8 +340,10 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
             iconColor="#826aed"
             onPress={() => toggleFavorites(storyData.id)}
           />
-        </View>
-        <Snackbar
+        </View> */}
+        
+      </ScrollView>
+      <Snackbar
           visible={visible}
           onDismiss={onDismissSnackBar}
           duration={2000}
@@ -288,7 +357,6 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
         >
           Story copied
         </Snackbar>
-      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -8,7 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/narrato_splash.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -32,6 +32,9 @@
         "projectId": "12d4e220-19a7-4eb8-a9a3-e4379f8ecadf"
       }
     },
-    "owner": "ihirendev"
+    "owner": "ihirendev",
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

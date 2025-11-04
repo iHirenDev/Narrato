@@ -3,7 +3,8 @@ import './global.css';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import HomeScreen from './src/screens/HomeScreen';
 import StoryScreen from './src/screens/StoryScreen';
 import CustomDrawerContent from './src/components/CustomDrawerContent';
@@ -13,14 +14,14 @@ import {store, persistor} from './src/store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 
 const Drawer = createDrawerNavigator();
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 
 function DrawerNavigator() {
   return (
     <Drawer.Navigator
-      drawerContent={(props) => <CustomDrawerContent />}
-      screenOptions={({ navigation }) => ({
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{
         headerStyle: {
           backgroundColor: '#7742b7',
         },
@@ -29,8 +30,7 @@ function DrawerNavigator() {
           backgroundColor: '#fff',
           width: 350,
         },
-
-      })}
+      }}
     >
       <Drawer.Screen
         name="Home"
@@ -48,6 +48,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        {/* <GestureHandlerRootView style={{ flex: 1 }}> */}
           <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen 
@@ -68,8 +69,9 @@ export default function App() {
               />
             </Stack.Navigator>
           </NavigationContainer>
-        </PersistGate>
-      </Provider>
+        {/* </GestureHandlerRootView> */}
+      </PersistGate>
+    </Provider>
   );
 }
 

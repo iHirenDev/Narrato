@@ -101,7 +101,10 @@ const HomeScreen = ({}) => {
         className='story-button'
         mode='contained'
       >
-        {loading ? <ActivityIndicator size='small' color='#ffff'/> : 'Generate Story'}
+        {loading ? 
+        <ActivityIndicator size='small' color='#ffff'/> 
+        : 
+        'Generate Story'}
       </Button> 
       <Text className='divider-text'>OR</Text>
       <View className='section-container'>

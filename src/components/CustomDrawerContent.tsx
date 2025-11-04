@@ -1,20 +1,21 @@
-import { View, Text, SafeAreaView, ScrollView } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import {  Button, Divider, List } from 'react-native-paper'
 import React,{useState, useEffect} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { DrawerContentComponentProps } from '@react-navigation/drawer'
 import { RootStackParamList } from '../NavigationParamList'
 import { useSelector, useDispatch } from 'react-redux'
 import {RootState} from '../store/store'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { FlatList } from 'react-native'
 import { resetStories } from '../store/features/storySlice'
-
+import { SafeAreaView } from 'react-native-safe-area-context'
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DrawerNavigator'>
 
 
-const CustomDrawerContent = () => {
+const CustomDrawerContent = (props: DrawerContentComponentProps) => {
 
   const navigation = useNavigation<HomeScreenNavigationProp>();
 

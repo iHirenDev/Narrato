@@ -1,14 +1,11 @@
-import { View, Text, TouchableOpacity } from 'react-native'
-import { TextInput, Chip, Button, ActivityIndicator } from 'react-native-paper'
-import React, {useState, useCallback, useEffect} from 'react'
+import { View, Text, ActivityIndicator, TextInput } from 'react-native'
+import {  Chip, Button } from 'react-native-paper'
+import React, {useState, useCallback, useRef} from 'react'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { RootStackParamList } from '../NavigationParamList'
-import {useDispatch, useSelector} from 'react-redux'
-import { RootState } from '../store/store'
-import { generateStory } from '../lib/storyGenerator'
+import {useDispatch} from 'react-redux'
 import {generateStoryGemini} from '../lib/storyGenerator'
-import { Ionicons } from "@expo/vector-icons";
 import { Image } from 'react-native'
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DrawerNavigator'>
@@ -18,10 +15,10 @@ const HomeScreen = ({}) => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
   const [storyPrompt, setStoryPrompt] = useState('')
   const [loading, setLoading] = useState(false)
+  const textInputRef = useRef<any>(null)
 
   const dispatch = useDispatch()
 
-  const logo = require('../../assets/images/circle_logo.png')
   const newLogo = require('../../assets/images/new_circle_logo.png')
 
   const FAVORITE_KEYWORDS = [
@@ -87,9 +84,10 @@ const HomeScreen = ({}) => {
       </View>
      
       <TextInput 
-        className='story-input'
-        mode='outlined' 
-        label='Enter keywords for the story'
+        ref={textInputRef}
+        className='h-20 p-2 border rounded-lg'
+        // mode='outlined' 
+        placeholder='Enter keywords for the story'
         value={storyPrompt}
         onChangeText={setStoryPrompt}
         multiline />
@@ -115,7 +113,16 @@ const HomeScreen = ({}) => {
               <Chip
                 className='keyword-chip'
                 key={index}
-                onPress={() => setStoryPrompt(keyword)}
+                onPress={() => {
+                  setStoryPrompt(keyword)
+                  // Trigger focus to animate the label
+                  if (textInputRef.current) {
+                    textInputRef.current.focus()
+                    setTimeout(() => {
+                      textInputRef.current.blur()
+                    }, 100)
+                  }
+                }}
                 mode='outlined'>
                 {keyword}
               </Chip>

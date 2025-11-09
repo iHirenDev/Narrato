@@ -14,7 +14,15 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strict": true,
-    "target": "esnext"
+    "target": "esnext",
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "tailwind.config": [
+        "./tailwind.config.js"
+      ]
+    }
   },
   "include": [
     "**/*.ts",

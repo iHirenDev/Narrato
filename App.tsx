@@ -13,13 +13,18 @@ import {Provider} from 'react-redux';
 import {store, persistor} from './src/store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 
+import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
+import '@/global.css';
+
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 
 function DrawerNavigator() {
   return (
-    <Drawer.Navigator
+    
+    <GluestackUIProvider mode="dark">
+      <Drawer.Navigator
       drawerContent={(props) => <CustomDrawerContent {...props} />}
       screenOptions={{
         headerStyle: {
@@ -40,6 +45,8 @@ function DrawerNavigator() {
         }}
       />
     </Drawer.Navigator>
+    </GluestackUIProvider>
+  
   );
 }
 

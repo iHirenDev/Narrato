@@ -7,7 +7,6 @@ import { RootStackParamList } from '../NavigationParamList';
 import { Dispatch } from '@reduxjs/toolkit';
 import { GoogleGenAI } from "@google/genai";
 
-
 export type Story = {
   id: string;
   title: string;

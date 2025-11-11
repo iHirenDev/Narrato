@@ -1,4 +1,4 @@
-import { View, TextInput } from 'react-native'
+import { View, TextInput, ScrollView } from 'react-native'
 import {  Chip, Button as PaperButton } from 'react-native-paper'
 import React, {useState, useCallback, useRef} from 'react'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
@@ -79,6 +79,7 @@ const HomeScreen = ({}) => {
   };
 
   return (
+    <ScrollView>
     <View className='screen-container'>
      {/* Header */}
      
@@ -213,6 +214,7 @@ const HomeScreen = ({}) => {
         </View>
       </View>
     </View>
+    </ScrollView>
   )
 }
 

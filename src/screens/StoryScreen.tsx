@@ -249,7 +249,7 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
           <Divider/>
         </View>
         {/* Button's for user actions */}
-        <View className="p-2 mt-4 mb-4 flex flex-row justify-center gap-10">
+        <View className="p-2 mt-4 mb-4 flex flex-row justify-center gap-20">
           <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border border-gray-500">
             <IconButton
               icon={() => <FontAwesome5 name="copy" size={35} color="#7742b7" />}
@@ -291,7 +291,7 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
             <Text className="text-center">Favorite</Text>
           </View>
 
-          <View className="flex flex-col justify-center items-center rounded-md h-24 w-[82px] border border-gray-500">
+          {/* <View className="flex flex-col justify-center items-center rounded-md h-24 w-[82px] border border-gray-500">
           <IconButton
               icon={() => <FontAwesome name="repeat" size={35} color="#7742b7" />}
               iconColor="#7742b7"
@@ -299,7 +299,7 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
               onPress={regenerateStory}
             />
             <Text className="text-center">Regenerate</Text>
-          </View>
+          </View> */}
         </View>
       <ScrollView 
         className="screen-container"

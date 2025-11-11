@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, FlatList } from 'react-native'
 import {  Button, Divider, List } from 'react-native-paper'
 import React,{useState, useEffect} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -9,9 +9,13 @@ import { RootStackParamList } from '../NavigationParamList'
 import { useSelector, useDispatch } from 'react-redux'
 import {RootState} from '../store/store'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { FlatList } from 'react-native'
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { resetStories } from '../store/features/storySlice'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
+import { SearchIcon } from '@/components/ui/icon';
+
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DrawerNavigator'>
 
 
@@ -44,14 +48,41 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
   //   }
   // };
 
+  function calculateDaysAgo(storyDate: Date): string{
+    const currentDate = new Date();
+    const storyDateObj = new Date(storyDate);
+    const timeDifference = currentDate.getTime() - storyDateObj.getTime();
+    const daysAgo = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+    if(daysAgo === 0){
+      return 'Today';
+    }else if(daysAgo === 1){
+      return 'Yesterday';
+    }
+    return `${daysAgo} days ago`;
+  }
+
   return (
+    
     <SafeAreaView className='flex-1'>
-      <View className='mt-16'>
+      <View className='flex-1'>
         <Text className='font-bold text-2xl text-center'>
           Previous Stories
         </Text>
-       
+
         <View className='w-full h-[1px] bg-gray-300 mt-3'/>
+
+        <Input 
+          className='m-2'
+          variant='outline'
+          size='lg'
+        >
+          <InputSlot className="pl-3">
+            <InputIcon as={SearchIcon} />
+          </InputSlot>
+          <InputField placeholder="Search stories..." />
+        </Input>
+
+        <View className='w-full h-[1px] bg-gray-300 mt-1'/>
         {/* <ScrollView
           className='mt-3 screen-container'
           contentContainerStyle={{ flexGrow:1, paddingBottom: 100 }}
@@ -100,9 +131,18 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
                   navigation.navigate("Story", { storyData: item });
                 }}
                 title={() => (
-                  <Text className="text-lg">
+                  <Text className="text-lg font-semibold">
                     {item.title.replace(/^"|"$|/g, "")}
                   </Text>
+                )}
+
+                description={() => (
+                  <View className='flex-row items-center'>
+                    <Ionicons className='mt-2 ml-1' name="time-outline" size={24} color="#7742b7" />
+                    <Text className="text-gray-500 text-lg ml-1 mt-2">
+                     {`${calculateDaysAgo(new Date(item.timestamp))}`}
+                    </Text>
+                  </View>
                 )}
                 
                 right={() =>
@@ -115,9 +155,16 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             </>
           )}
         />
-        
-    </View>
+      </View>
+    <View className='flex-row p-4 justify-between'>
+          <View className='flex-row'>
+            <FontAwesome5 name="user-circle" size={28} color="black" />
+            <Text className='font-semibold text-lg mx-4'>UserName</Text>
+          </View>
+          <SimpleLineIcons name="settings" size={28} color="black" />
+      </View>
     </SafeAreaView>
+
   )
 }
 

@@ -25,6 +25,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
 
   const stories = useSelector((state:RootState) => state.stories)
 
+  const reversedStories = [...stories].reverse();
   const dispatch = useDispatch();
 
   type Story = {
@@ -115,7 +116,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
           )}
         </ScrollView> */}
         <FlatList 
-          data={stories}
+          data={reversedStories}
           keyExtractor={(item,index) => item.id?.toString() ?? index.toString()}
           contentContainerStyle = {{flexGrow:1, paddingBottom:100}}
           showsVerticalScrollIndicator
@@ -156,13 +157,13 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
           )}
         />
       </View>
-    <View className='flex-row p-4 justify-between'>
+      {/* <View className='flex-row p-4 justify-between'>
           <View className='flex-row'>
             <FontAwesome5 name="user-circle" size={28} color="black" />
             <Text className='font-semibold text-lg mx-4'>UserName</Text>
           </View>
           <SimpleLineIcons name="settings" size={28} color="black" />
-      </View>
+      </View> */}
     </SafeAreaView>
 
   )

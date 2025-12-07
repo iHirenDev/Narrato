@@ -89,16 +89,16 @@ const HomeScreen = ({}) => {
           {/* <Ionicons name="book-outline" size={28} color="white" /> */}
           <Image source={newLogo} className="w-32 h-32 rounded-full p-2" />
         
-        <Text className="text-2xl font-bold mt-4 text-center">
+        <Text className="text-gray-700 text-2xl font-bold mt-4 text-center">
           Create Amazing Stories
         </Text>
-        <Text className="text-gray-500 font-semibold text-center mt-2">
+        <Text className="text-gray-500 subtitle-text-color font-semibold text-center mt-2">
           Transform your ideas into captivating stories with the power of AI.
           Just describe what you want and watch magic happen.
         </Text>
       </View>
       <View className="mt-8 p-2">
-        <Text className="font-semibold text-lg mb-2">
+        <Text className="text-gray-700 font-semibold text-lg mb-2">
           What’s your story about?
         </Text>
        
@@ -107,7 +107,7 @@ const HomeScreen = ({}) => {
      <View className='p-2 items-center'>
       <TextInput 
         ref={textInputRef}
-        className='h-20 p-2 w-full border rounded-lg'
+        className='h-12 p-2 w-full border rounded-lg'
         // mode='outlined' 
         placeholder='Enter keywords for the story'
         value={storyPrompt}
@@ -187,9 +187,9 @@ const HomeScreen = ({}) => {
       </Button>
       </View>
       
-      <Text className='divider-text'>OR</Text>
+      <Text className='text-gray-700 divider-text'>OR</Text>
       <View className='section-container'>
-        <Text className='subtitle'>Choose story keywords from below themes</Text>
+        <Text className='subtitle text-gray-700'>Choose story keywords from below themes</Text>
         <View className='keyword-container'>
           {
             FAVORITE_KEYWORDS.map((keyword,index) =>(

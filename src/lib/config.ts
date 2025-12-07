@@ -1,6 +1,8 @@
+import Constants from "expo-constants";
 
+const extra = Constants.expoConfig?.extra ?? {};
 export default {
-    openai_api_key: process.env.EXPO_PUBLIC_OPENAI_API_KEY,
-    deepseek_api_key: process.env.EXPO_PUBLIC_DEEPSEEK_API_KEY,
-    gemini_ai_api_key: process.env.EXPO_PUBLIC_GEMINI_API_KEY
+    openai_api_key: extra.openai_api_key,
+    deepseek_api_key: extra.deepseek_api_key,
+    gemini_ai_api_key: extra.gemini_ai_api_key
   };

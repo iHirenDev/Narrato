@@ -249,7 +249,7 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
           <Divider/>
         </View>
         {/* Button's for user actions */}
-        <View className="p-2 mt-4 mb-4 flex flex-row justify-center gap-20">
+        <View className="p-2 mt-4 mb-4 flex flex-row justify-center gap-10">
           <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border border-gray-500">
             <IconButton
               icon={() => <FontAwesome5 name="copy" size={35} color="#7742b7" />}

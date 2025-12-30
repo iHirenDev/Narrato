@@ -6,6 +6,7 @@ interface Story{
     story: string;
     audio?:string;
     isFavorite: boolean;
+    keywords: string[];
     timestamp: string;
 }
 

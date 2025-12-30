@@ -249,8 +249,9 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
           <Divider/>
         </View>
         {/* Button's for user actions */}
-        <View className="p-2 mt-4 mb-4 flex flex-row justify-center gap-10">
-          <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border border-gray-500">
+        <View>
+          <View className="p-2 mt-4 mb-4 flex flex-row justify-center gap-10">
+          <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border-2 border-gray-500">
             <IconButton
               icon={() => <FontAwesome5 name="copy" size={35} color="#7742b7" />}
               // iconColor="#09046f"
@@ -260,7 +261,7 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
             <Text className="text-center">Copy</Text>
           </View>
 
-          <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border border-gray-500">
+          <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border-2 border-gray-500">
           <IconButton
             icon={() =>
               isPlaying ? (
@@ -276,7 +277,7 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
             <Text className="text-center">Listen</Text>
           </View>
 
-          <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border border-gray-500">
+          <View className="flex flex-col justify-center items-center rounded-md h-24 w-20 border-2 border-gray-500">
           <IconButton
             icon={() =>
               story?.isFavorite ? (
@@ -300,6 +301,8 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
             />
             <Text className="text-center">Regenerate</Text>
           </View> */}
+          </View>
+          <Text className="text-center font-bold">{`Keywords: ${storyData.keywords}`}</Text>
         </View>
       <ScrollView 
         className="screen-container"

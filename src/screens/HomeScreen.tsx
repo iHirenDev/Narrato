@@ -36,8 +36,20 @@ const HomeScreen = ({}) => {
   'underwater story',
   'time travel',
   'dragon tale',
-  'mystery',
-  'alien story',
+  'fantasy world',
+  'mysterious island',
+  'superhero story',
+  'robot adventure',
+  'fairy tale',
+  'post-apocalyptic world',
+  'space exploration',
+  'underwater adventure',
+  'time loop',
+  'magic school',
+  'mythical creature',
+  'robot revolution',
+  'adventure in space',
+  'mysterious planet',
   'pirate adventure',
 ];
 
@@ -107,12 +119,13 @@ const HomeScreen = ({}) => {
      <View className='p-2 items-center'>
       <TextInput 
         ref={textInputRef}
-        className='h-12 p-2 w-full border rounded-lg'
-        // mode='outlined' 
+        className='h-20 p-2 bg-slate-200 w-full border border-gray-400 rounded-lg shadow-md'
+        //  mode='outlined' 
         placeholder='Enter keywords for the story'
         value={storyPrompt}
         onChangeText={setStoryPrompt}
-        multiline />
+        multiline
+        numberOfLines={5} />
 
       {/* <Input
         className='mt-4 h-20 border border-black/70 rounded-lg'
@@ -157,7 +170,7 @@ const HomeScreen = ({}) => {
       </PaperButton>  */}
       
       <Button 
-        className='story-button w-full rounded-2xl h-16'   
+        className='story-button w-full rounded-2xl h-16 shadow-md'   
         variant='solid' 
         size='md' 
         action='primary'
@@ -194,7 +207,7 @@ const HomeScreen = ({}) => {
           {
             FAVORITE_KEYWORDS.map((keyword,index) =>(
               <Chip
-                className='keyword-chip'
+                className='keyword-chip shadow-md'
                 key={index}
                 onPress={() => {
                   setStoryPrompt(keyword)

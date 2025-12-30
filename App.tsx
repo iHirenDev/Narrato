@@ -12,7 +12,6 @@ import { RootStackParamList } from './src/NavigationParamList';
 import {Provider} from 'react-redux';
 import {store, persistor} from './src/store/store';
 import { PersistGate } from 'redux-persist/integration/react';
-
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import '@/global.css';
 

@@ -33,6 +33,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     title: string;
     story: string;
     audio?:string;
+    keywords: string[];
     timestamp: string;
   }
 
@@ -138,11 +139,14 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
                 )}
 
                 description={() => (
-                  <View className='flex-row items-center'>
-                    <Ionicons className='mt-2 ml-1' name="time-outline" size={24} color="#7742b7" />
-                    <Text className="text-gray-500 text-lg ml-1 mt-2">
-                     {`${calculateDaysAgo(new Date(item.timestamp))}`}
-                    </Text>
+                  <View className=''>
+                    <View className='flex-row items-center'>
+                      <Ionicons className='mt-2 ml-1' name="time-outline" size={24} color="#7742b7" />
+                      <Text className="text-gray-500 text-lg ml-1 mt-2">
+                       {`${calculateDaysAgo(new Date(item.timestamp))}`}
+                      </Text>
+                    </View>
+                    <Text className='ml-2 mt-2'>{`Keywords: ${item.keywords}`}</Text>
                   </View>
                 )}
                 

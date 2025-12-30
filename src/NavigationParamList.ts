@@ -9,6 +9,7 @@ export type DrawerNavigatorParamList = {
             story: string;
             isFavorite: boolean;
             audio?:string;
+            keywords: string[];
             timestamp: string;
         }
     }
@@ -23,6 +24,7 @@ export type RootStackParamList = {
             story: string;
             isFavorite: boolean;
             audio?:string;
+            keywords: string[];
             timestamp: string;
         }
     }

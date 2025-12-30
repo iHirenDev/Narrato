@@ -14,6 +14,7 @@ export type Story = {
   isFavorite: boolean;
   audio?: string;
   timestamp: string;
+  keywords: string[];
 };
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DrawerNavigator'>;
@@ -81,6 +82,7 @@ export const generateStoryGemini = async ({
       title: title,
       story: story,
       isFavorite: false,
+      keywords: storyPrompt.split(' ').slice(0, 5),
       timestamp
     };
 
@@ -89,6 +91,7 @@ export const generateStoryGemini = async ({
       title: title,
       story: story,
       isFavorite: false,
+      keywords: storyPrompt.split(' ').slice(0, 5),
       timestamp
     }));
 
@@ -146,6 +149,7 @@ export const generateStory = async ({
       title: title,
       story: story,
       isFavorite: false,
+      keywords: storyPrompt.split(' ').slice(0, 5),
       timestamp
     };
 
@@ -154,6 +158,7 @@ export const generateStory = async ({
       title: title,
       story: story,
       isFavorite: false,
+      keywords: storyPrompt.split(' ').slice(0, 5),
       timestamp
     }));
 

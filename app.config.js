@@ -55,7 +55,7 @@ export default ({ config }) => {
     slug: "narrato",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/icon.png",
+    icon: "./assets/narrato-icon.png",
     userInterfaceStyle: "light",
     newArchEnabled: true,
 
@@ -73,6 +73,11 @@ export default ({ config }) => {
     android: {
       package: "com.ihirendev.narrato",
       versionCode: 3,
+      navigationBar:{
+        visible: "true",
+        backgroundColor: "#ffffffff",
+        position:"absolute"
+      },
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#ffffff"

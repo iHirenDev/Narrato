@@ -55,7 +55,7 @@ export default ({ config }) => {
     slug: "narrato",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/narrato-icon.png",
+    icon: "./assets/narrato_icon.png",
     userInterfaceStyle: "light",
     newArchEnabled: true,
 

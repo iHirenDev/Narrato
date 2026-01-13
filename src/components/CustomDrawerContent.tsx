@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, FlatList } from 'react-native'
 import {  Button, Divider, List } from 'react-native-paper'
-import React,{useState, useEffect} from 'react'
+import React,{useState, useEffect, useMemo} from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
@@ -15,6 +15,8 @@ import { resetStories } from '../store/features/storySlice'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
 import { SearchIcon } from '@/components/ui/icon';
+import { useDebounce }  from 'use-debounce';
+
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'DrawerNavigator'>
 
@@ -25,8 +27,33 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
 
   const stories = useSelector((state:RootState) => state.stories)
 
-  const reversedStories = [...stories].reverse();
   const dispatch = useDispatch();
+
+  // Story search functionality
+  
+  const [searchText, setSearchText] = useState('');
+  const [debouncedSearchText] = useDebounce(searchText, 300);
+
+  const displayStories = useMemo(() => {
+    const reversedStories = [...stories].reverse();
+
+    if(!searchText.trim()) return reversedStories
+
+
+    const query = searchText.toLowerCase();
+    return reversedStories.filter((story) => {
+      const searchableFields = [
+        story.title,
+        story.story,
+        story.keywords,
+      ].join(' ').toLowerCase();
+
+      const words = query.split(' ').filter(Boolean);
+      return words.every((word) => searchableFields.includes(word));
+      })
+    },[stories,searchText])
+  
+  
 
   type Story = {
     id: string;
@@ -35,9 +62,9 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
     audio?:string;
     keywords: string[];
     timestamp: string;
+    isFavorite: boolean;
   }
 
-  
 
   // const loadStories = async () => {
   //   try {
@@ -49,6 +76,8 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
   //     console.error('Error loading stories:', error);
   //   }
   // };
+
+ 
 
   function calculateDaysAgo(storyDate: Date): string{
     const currentDate = new Date();
@@ -81,43 +110,18 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
           <InputSlot className="pl-3">
             <InputIcon as={SearchIcon} />
           </InputSlot>
-          <InputField placeholder="Search stories..." />
+          <InputField 
+            placeholder="Search stories..."
+            value={searchText}
+            onChangeText={setSearchText} 
+          />
         </Input>
 
+
         <View className='w-full h-[1px] bg-gray-300 mt-1'/>
-        {/* <ScrollView
-          className='mt-3 screen-container'
-          contentContainerStyle={{ flexGrow:1, paddingBottom: 100 }}
-          showsVerticalScrollIndicator
-        >
-          
-            {stories.map((story, index) => (
-            <React.Fragment key={index}> 
-              
-              <List.Item 
-                onPress={() => {
-                  navigation.navigate('Story', {storyData: story});
-                }}
-                
-                key={index} 
-                title={() => (
-                  <Text className='text-lg'>{story.title.replace(/^"|"$|/g, '')}</Text>
-                )}
-                right={() => (
-                  story.isFavorite ? 
-                  <Ionicons name="star" size={24} color='#515151' /> : <></>
-                )}
-                />  
-                {index === stories.length -  1 ? <View></View> : <Divider/>}
-              </React.Fragment>
-            ))}
-            
-          {stories.length === 0 && (
-            <Text className='text-gray-500 font-bold text-center text-lg'>No stories generated yet.</Text>
-          )}
-        </ScrollView> */}
+        
         <FlatList 
-          data={reversedStories}
+          data={displayStories}
           keyExtractor={(item,index) => item.id?.toString() ?? index.toString()}
           contentContainerStyle = {{flexGrow:1, paddingBottom:100}}
           showsVerticalScrollIndicator

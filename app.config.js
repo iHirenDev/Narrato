@@ -79,7 +79,7 @@ export default ({ config }) => {
         position:"absolute"
       },
       adaptiveIcon: {
-        foregroundImage: "./assets/adaptive-icon.png",
+        foregroundImage: "./assets/narrato_icon.png",
         backgroundColor: "#ffffff"
       },
       // You do NOT need RECORD_AUDIO. Remove it.

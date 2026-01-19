@@ -14,7 +14,7 @@ import SimpleLineIcons from '@expo/vector-icons/SimpleLineIcons';
 import { resetStories } from '../store/features/storySlice'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
-import { SearchIcon } from '@/components/ui/icon';
+import { SearchIcon, CloseCircleIcon } from '@/components/ui/icon';
 import { useDebounce }  from 'use-debounce';
 
 
@@ -77,6 +77,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
   //   }
   // };
 
+  
  
 
   function calculateDaysAgo(storyDate: Date): string{
@@ -115,6 +116,13 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             value={searchText}
             onChangeText={setSearchText} 
           />
+          <InputSlot className="pr-3" onPress={() => setSearchText('')}>
+            {searchText && (
+              <InputIcon
+                as={CloseCircleIcon}
+              />
+            )}
+          </InputSlot>
         </Input>
 
 

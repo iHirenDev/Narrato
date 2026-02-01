@@ -14,6 +14,7 @@ import {store, persistor} from './src/store/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
 import '@/global.css';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -55,6 +56,7 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         {/* <GestureHandlerRootView style={{ flex: 1 }}> */}
+        <SafeAreaView className='flex-1' edges={['bottom']}>
           <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
               <Stack.Screen 
@@ -75,6 +77,7 @@ export default function App() {
               />
             </Stack.Navigator>
           </NavigationContainer>
+          </SafeAreaView>
         {/* </GestureHandlerRootView> */}
       </PersistGate>
     </Provider>

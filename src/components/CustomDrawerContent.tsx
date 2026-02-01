@@ -112,6 +112,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
             <InputIcon as={SearchIcon} />
           </InputSlot>
           <InputField 
+            className='text-gray-500'
             placeholder="Search stories..."
             value={searchText}
             onChangeText={setSearchText} 
@@ -134,7 +135,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
           contentContainerStyle = {{flexGrow:1, paddingBottom:100}}
           showsVerticalScrollIndicator
           ListEmptyComponent={() => (
-            <Text className='text-gray-500 font-bold text-center text-lg'>
+            <Text className='mt-10 text-gray-500 font-bold text-center text-lg'>
               No stories generated yet.
             </Text>
           )}

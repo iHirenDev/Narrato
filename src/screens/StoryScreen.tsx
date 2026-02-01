@@ -242,8 +242,6 @@ const StoryScreen = ({ route }: { route: StoryScreenRouteProp }) => {
   */
   return (
     <SafeAreaView className="flex-1">
-
-      
         <View>
           <Text className="title-large mb-2 py-4">{storyData.title}</Text>
           <Divider/>

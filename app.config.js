@@ -79,10 +79,9 @@ export default ({ config }) => {
         position:"absolute"
       },
       adaptiveIcon: {
-        foregroundImage: "./assets/narrato_icon.png",
-        backgroundColor: "#ffffff"
+        foregroundImage: "./assets/narrato-adaptive.png",
+        backgroundColor: "#191044"
       },
-      // You do NOT need RECORD_AUDIO. Remove it.
       blockedPermissions: ["android.permission.RECORD_AUDIO"],
       permissions: ["INTERNET", "VIBRATE"]
     },

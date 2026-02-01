@@ -119,7 +119,7 @@ const HomeScreen = ({}) => {
      <View className='p-2 items-center'>
       <TextInput 
         ref={textInputRef}
-        className='h-20 p-2 bg-slate-200 w-full border border-gray-400 rounded-lg shadow-md'
+        className='text-gray-500 h-20 p-2 bg-slate-200 w-full border border-gray-400 rounded-lg shadow-md'
         //  mode='outlined' 
         placeholder='Enter keywords for the story'
         value={storyPrompt}

@@ -83,7 +83,7 @@ export default ({ config }) => {
         backgroundColor: "#191044"
       },
       blockedPermissions: ["android.permission.RECORD_AUDIO"],
-      permissions: ["INTERNET", "VIBRATE"]
+      permissions: ["INTERNET", "VIBRATE"],
     },
 
     web: {

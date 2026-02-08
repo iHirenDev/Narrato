@@ -33,6 +33,8 @@ const openai = new OpenAI({
 
 const geminiAI = new GoogleGenAI({apiKey:config.gemini_ai_api_key})
 
+
+
 export const generateStoryGemini = async ({
   storyPrompt,
   setLoading,
@@ -44,6 +46,14 @@ export const generateStoryGemini = async ({
   setLoading(true);
   Keyboard.dismiss();
 
+  const keywords =  storyPrompt
+  .split(',')
+  .map(keyword => keyword.trim())
+  .filter(keyword => keyword.length > 0)
+  .slice(0, 5);
+
+  console.log("Keywords are: ",keywords);
+  
   try {
     const response = await geminiAI.models.generateContent({
       model:'gemini-2.5-flash-lite',
@@ -82,7 +92,7 @@ export const generateStoryGemini = async ({
       title: title,
       story: story,
       isFavorite: false,
-      keywords: storyPrompt.split(' ').slice(0, 5),
+      keywords: keywords,
       timestamp
     };
 
@@ -91,7 +101,7 @@ export const generateStoryGemini = async ({
       title: title,
       story: story,
       isFavorite: false,
-      keywords: storyPrompt.split(' ').slice(0, 5),
+      keywords: keywords,
       timestamp
     }));
 
@@ -104,69 +114,71 @@ export const generateStoryGemini = async ({
 };
 
 
-export const generateStory = async ({
-  storyPrompt,
-  setLoading,
-  navigation,
-  dispatch
-}: GenerateStoryParams) => {
-  if (!storyPrompt.trim()) return;
+// Deepseek API...
 
-  setLoading(true);
-  Keyboard.dismiss();
+// export const generateStory = async ({
+//   storyPrompt,
+//   setLoading,
+//   navigation,
+//   dispatch
+// }: GenerateStoryParams) => {
+//   if (!storyPrompt.trim()) return;
+
+//   setLoading(true);
+//   Keyboard.dismiss();
   
-  try {
-    const completion = await openai.chat.completions.create({
-      messages: [
-        {
-          role: 'system',
-          content: 'You are a creative story writer. Create a short, engaging short story based on the given prompt. The story should be approximately 250-300 words long. Also provide a short title for the story. Make sure the story is complete and engaging despite its brevity.'
-        },
-        {
-          role: 'user',
-          content: storyPrompt
-        }
-      ],
-      model: "deepseek-chat",
-      temperature: 1.5
-    });
+//   try {
+//     const completion = await openai.chat.completions.create({
+//       messages: [
+//         {
+//           role: 'system',
+//           content: 'You are a creative story writer. Create a short, engaging short story based on the given prompt. The story should be approximately 250-300 words long. Also provide a short title for the story. Make sure the story is complete and engaging despite its brevity.'
+//         },
+//         {
+//           role: 'user',
+//           content: storyPrompt
+//         }
+//       ],
+//       model: "deepseek-chat",
+//       temperature: 1.5
+//     });
 
-    const generatedStory = completion.choices[0]?.message?.content || '';
-    const lines = generatedStory.split('\n');
-    let title = '';
+//     const generatedStory = completion.choices[0]?.message?.content || '';
+//     const lines = generatedStory.split('\n');
+//     let title = '';
     
-    if (generatedStory.includes('**Title:')) {
-      title = lines[0].replace(/\*\*/g, "").slice(6);
-    } else {
-      title = lines[0].replace(/\*\*/g, "");
-    }
+//     if (generatedStory.includes('**Title:')) {
+//       title = lines[0].replace(/\*\*/g, "").slice(6);
+//     } else {
+//       title = lines[0].replace(/\*\*/g, "");
+//     }
     
-    const story = lines.slice(1).join('\n').trim();
-    const timestamp = new Date().toISOString();
+//     const story = lines.slice(1).join('\n').trim();
+//     const timestamp = new Date().toISOString();
 
-    const storyData: Story = {
-      id: timestamp,
-      title: title,
-      story: story,
-      isFavorite: false,
-      keywords: storyPrompt.split(' ').slice(0, 5),
-      timestamp
-    };
+//     const storyData: Story = {
+//       id: timestamp,
+//       title: title,
+//       story: story,
+//       isFavorite: false,
+//       keywords: storyPrompt.split(' ').slice(0, 5),
+//       timestamp
+//     };
 
-    dispatch(addStory({
-      id: timestamp,
-      title: title,
-      story: story,
-      isFavorite: false,
-      keywords: storyPrompt.split(' ').slice(0, 5),
-      timestamp
-    }));
+//     dispatch(addStory({
+//       id: timestamp,
+//       title: title,
+//       story: story,
+//       isFavorite: false,
+//       keywords: storyPrompt.split(' ').slice(0, 5),
+//       timestamp
+//     }));
 
-    navigation.navigate('Story', { storyData });
-    setLoading(false);
-  } catch (error) {
-    console.log(error);
-    setLoading(false);
-  }
-};
+//     navigation.navigate('Story', { storyData });
+//     setLoading(false);
+//   } catch (error) {
+//     console.log(error);
+//     setLoading(false);
+//   }
+// };
 

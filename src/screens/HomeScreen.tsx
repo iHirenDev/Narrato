@@ -1,4 +1,4 @@
-import { View, TextInput, ScrollView } from 'react-native'
+import { View, TextInput, ScrollView, Platform } from 'react-native'
 import {  Chip, Button as PaperButton } from 'react-native-paper'
 import React, {useState, useCallback, useRef} from 'react'
 import { useNavigation, useFocusEffect } from '@react-navigation/native'
@@ -23,7 +23,7 @@ const HomeScreen = ({}) => {
   const [loading, setLoading] = useState(false)
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
-
+  const [height, setHeight] = useState<number>(50)
   const textInputRef = useRef<any>(null)
 
   const dispatch = useDispatch()
@@ -61,6 +61,26 @@ const HomeScreen = ({}) => {
     },[])
   )
 
+  // ScrollView method
+
+  const scrollViewRef = useRef<ScrollView>(null);
+  const targetRef = useRef<View>(null);
+
+  const scrollToButton = () => {
+    if(targetRef.current){
+      targetRef.current.measure(
+        (x,y,width,height, pageX, pageY) => {
+          console.log(`Y postion:${y}`);
+          
+          scrollViewRef.current?.scrollTo({
+            y: y + height,
+            animated:true
+          });
+        },
+       
+      )
+    }
+  }
 
   
 
@@ -91,7 +111,7 @@ const HomeScreen = ({}) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView ref={scrollViewRef}>
     <View className='screen-container'>
      {/* Header */}
      
@@ -117,59 +137,32 @@ const HomeScreen = ({}) => {
       </View>
       
      <View className='p-2 items-center'>
+      
       <TextInput 
         ref={textInputRef}
-        className='text-gray-500 h-20 p-2 bg-slate-200 w-full border border-gray-400 rounded-lg shadow-md'
-        //  mode='outlined' 
-        placeholder='Enter keywords for the story'
+        onFocus={scrollToButton}
+        className={`flex-1 text-gray-800 p-2 bg-slate-200 w-full border border-gray-400 rounded-2xl shadow-md`}
+        style={Platform.OS === 'android' ? { minHeight: 50, height: height } : {}}
+        placeholderTextColor='gray'
+        placeholder='Enter keywords (comma-separated): time travel, school'
         value={storyPrompt}
         onChangeText={setStoryPrompt}
+        onContentSizeChange={(e) => setHeight(e.nativeEvent.contentSize.height)}
+        textAlignVertical='center'
         multiline
-        numberOfLines={5} />
-
-      {/* <Input
-        className='mt-4 h-20 border border-black/70 rounded-lg'
-        variant='outline'
-        isDisabled={false}
-        isRequired={true}
-        size='md'
-        
-      >
-        <InputField 
-          className='mt-4 -ml-2 text-lg h-20'
-          multiline
-          value={storyPrompt}
-          onChangeText={setStoryPrompt} 
-          placeholder='Enter keywords for the story'
+        onEndEditing={() => {
+          scrollViewRef.current?.scrollTo({
+            y: 0,
+            animated: true
+          })
+        }}
         />
-      </Input> */}
+
+     
       <View className='spacer-small'></View>
-
-
-      {/* <PaperButton 
-        buttonColor='#7742b7'
-        onPress={handleGenerateStory}
-        className='story-button'
-        mode='contained'
-      >
-        {alertVisible && (
-          <CustomAlertDialog
-            alertHeading="Invalid Input"
-            alertBody={alertMessage}
-            onClose={() => setAlertVisible(false)}
-          />
-        )
-
-        }
-        {loading ? 
-        // <ActivityIndicator size='small' color='#ffff'/> 
-        // <Spinner size='large' color='white'/>
-        <Progress.Circle size={30} color='#ffffff' borderWidth={3} indeterminate={true}/>
-        : 
-        'Generate Story'}
-      </PaperButton>  */}
       
-      <Button 
+      <View ref={targetRef} className='w-full items-center'>
+        <Button 
         className='story-button w-full rounded-2xl h-16 shadow-md'   
         variant='solid' 
         size='md' 
@@ -198,6 +191,7 @@ const HomeScreen = ({}) => {
           }
         </ButtonText>
       </Button>
+      </View>
       </View>
       
       <Text className='text-gray-700 divider-text'>OR</Text>
